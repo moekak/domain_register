@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "inspiring-tower-424202-g9",
+  "private_key_id": "b6ee895eb2c29332f55f482e2acf07004c481654",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDaLmhZ+TLGOwOs\nYdHzsAlJD03jbeZVeDnAnp9hHcDuk1jO/2LfsRKpDToe/thr3UoWB8dP03aAjP0O\nS89glNgw752Q3WvPAk4zePR9xKluTPMbUrrvg57EEUeq2n+ORNWLq/hFaUc8pub1\nIssF5cV4jqf8BCusGRberDQ4i2pSbA2zwojUC7RpIPHX+OoPWC296Dy3HuU5GxLc\nNa6jzF+g9Lrhp6ozW5I98FkBS+5STDQd9uCsG43fKcL1s+NrXtHSRfFB7eX+SUOc\nm7q/Ry/Qn0u/jG/0yj+wzO+jN6//eI3W/QfKe2fJzNlylgABAm4AxOwSoM5BQkwL\n5xgaSdT1AgMBAAECggEAETndcU/J4M7OARvkDgprC+1SZ/odrR0wlMhcAGNEqqbQ\nOd+ouHfsPOlXb7+36fmZx4LWYLNrGsaG6vcJ/i/M9eglQkfJIu9P/05gd1bsovxz\nq/JB4iE74B0WfHiDM6y0SN0gsqeXlplS3i3gu6wi2tw138xF1RunVkNgXXUxxXoE\neHNbpPnBnoOqttl+TBoKA2YXfrJiwWlY9yq3mZoeK1d/7FZMqwkhzdTNa1VgFDg/\n4lxXoQfBUOtFocQWFfCpQm2BbsKBB70XccEqgZBtl3BvU5US/TgmmcyouoIWa4F7\nYjfMZ6wFDEdn4k6SxMmkY5qSoVVvMkL38JXoz1E2IQKBgQD7VJigOT4+o/LRgRtK\njPbwFzyGE+hDsp5ZZ1CiBzBKbxG1iDLf63YFWy4DjDqFdvgGufBxc0qBuZ7DYNse\neHHeER3vHlWM+/foL8n7+EFAKJsPVH/ATz48ZwqCMKkKDArOiok1k9U8HV0oN4cH\nZfhJZSPpxTgHP79a0T+Jek+4nQKBgQDePCTXSdd5Wh5hySBKpZKpHzxu1+TG58yk\nDtfzLqx8n9HwXRcAeOt2V+9xThNNXmNk2t6KqYBnEJYBB+PXstn+TgXtUD28hjIQ\nOxEX4POKTh6E0ND1QopjmhPWU378FyeMOOrTvYvdICLEZEgPvfcR5Ot1DlNUFzCb\nIboCGtKCOQKBgHsZBSQ8xUri/BQ2+wn5nx0bFG7LI1C9FKfPXYPup21dlzvleJ2J\n8yVOcmwUa7lg+rw4qBa5FD4Tjzo8nzX+Yi8VDSdIITjLVLHpbjG2dycYfFH23hdv\n+JiXE2OOt8yO92AQJIIUZTVrYGxJPh6WiBRSsFNYYEfUpkGyCT+po5BVAoGAMUOj\n5xW3bm9LzOGJBwMtP9Bs1SWG0ZERDE0+EeqG0hmbsGzybGhhyho0OinUnZIO9oyO\nSK7KiA5lMlVNbMN5D6a8KZ9gECqvbmmpoGF9m2s12LtxluzpQKsnOpvHyppXaf40\nEDw0hRBapK6WSucRniXhDFHgpwN9Aua3FUBc6gECgYEA0CWFlWAwwenAr7j9PEX3\nZihF+ibEb5AwNJnoiKBUjfX4y1MBlUVrlXNYZ+8rjFVwYOAzEsstr2ATmFSVD5+A\nlo+d13Del9o5wb6lx4NHHAwyBhrmQ/HaMATHvkRABU6d6SgLKkZhCYvo04XePhNH\nUIbLrMHcqmYGW47RG6tUipc=\n-----END PRIVATE KEY-----\n",
+  "client_email": "id-214@inspiring-tower-424202-g9.iam.gserviceaccount.com",
+  "client_id": "105633092521100441240",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/id-214%40inspiring-tower-424202-g9.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
