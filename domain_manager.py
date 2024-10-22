@@ -11,6 +11,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 # 環境変数を使うための準備
 from dotenv import load_dotenv
 import os, time, logging, configparser
+from get_server_name import get_server
 load_dotenv()
 
 # confファイルを使用する
@@ -261,8 +262,6 @@ def check_success_domain(driver, login_url, username, password, domain_data):
                               EC.visibility_of_element_located((By.XPATH, f"//a[@href='/analyzer/{domain}']"))
                         )
 
-                        print(domain_data)
-
                         success_domain.append(domain)
                   except:
                         print("no data")
@@ -288,86 +287,121 @@ def login_to_site_for_dns(driver, login_url, retry = 3):
                   login_to_site_for_dns(driver, login_url, retry -1)
             else:
                   get_error(e, "DNSの設定に失敗しました。")
+                  
 
-def set_dns(driver, success_domain, dns_data, retry = 3):
+def set_dns_for_each_domain(domain, driver, dns_data, retry = 3):
       try:
-           # ドメインの設定操作
+            # ドメイン名を入力する
+            
+            print("実行１")
+            domain_input_field = WebDriverWait(driver, 50).until(
+                  EC.visibility_of_element_located((By.CSS_SELECTOR, ".w43per"))
+            )
+
+            domain_input_field.send_keys(domain)
+            
+            
+            print("実行2")
+            search_btn = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, ".btnSubmitBlack")))
+            driver.execute_script("arguments[0].click();", search_btn) 
+
+
+            open_btn = WebDriverWait(driver, 20).until(
+                  EC.visibility_of_element_located((By.XPATH, f"//a[@href='moddns.php?action=moddns2&domainname={domain}']"))
+            )
+            
+            time.sleep(3)
+            
+            driver.execute_script("arguments[0].click();", open_btn)
+         
+            
+            # DNS情報を入力する
+            print("実行3")
+            textarea = WebDriverWait(driver, 20).until(
+                  EC.visibility_of_element_located((By.CSS_SELECTOR, "#records"))
+            )
+            
+            textarea_value = textarea.get_attribute("value")
+            
+            if(textarea_value == ""):
+                  print("実行4")
+                  textarea.send_keys(dns_data)  
+            
+            time.sleep(3)
+                  
+
+            print("実行5")
+            send_btn = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, ".inputSend")))
+            driver.execute_script("arguments[0].scrollIntoView(true);", send_btn)
+            driver.execute_script("arguments[0].click();", send_btn)
+
+            print("実行6")
+            return_button = WebDriverWait(driver, 30).until(
+                  EC.visibility_of_element_located((By.XPATH, f"//a[@href='modall.php']"))
+            )
+            
+
+            
+            print("実行7")
+            driver.execute_script("arguments[0].click();", return_button)
+            send_line_notify(f"{domain}のDNS登録に成功しました。")
+            time.sleep(5)
+            
+            
+      except Exception as e:
+            if(retry > 0):
+                  get_error(e, f"DNS登録の最中にエラーが発生しました。再登録を試みます。 \n\n domain: {domain}")
+                  elements = driver.find_elements(By.NAME, "btn_back")
+                  if elements:
+                        print("elment 見つかった！")
+                        elements[0].click()
+                        send_btn = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, ".inputSend")))
+                        
+                        print(send_btn)
+                        
+                        driver.execute_script("arguments[0].scrollIntoView(true);", send_btn)
+                        driver.execute_script("arguments[0].click();", send_btn)
+
+                  
+                        return_button = WebDriverWait(driver, 60).until(
+                              EC.visibility_of_element_located((By.XPATH, f"//a[@href='modall.php']"))
+                        )
+                        driver.execute_script("arguments[0].click();", return_button)
+                        send_line_notify(f"再度の試みで{domain}のDNS登録に成功しました。")
+                  else:
+                        print("elment ない！")
+                        driver.refresh()
+                        set_dns_for_each_domain(domain, driver, dns_data, retry -1)
+                        
+                  
+            else:
+                  get_error(e, f"再登録を試みましたが失敗しました。 \n\n domain: {domain}")
+
+def set_dns(driver, success_domain, dns_data):
+      try:
+            # ドメインの設定操作
             setting_btn = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#cpside_domain_config")))
             driver.execute_script("arguments[0].click();", setting_btn)
+            
 
             for domain in success_domain:
-                  # ドメイン名を入力する
+                  set_dns_for_each_domain(domain, driver, dns_data, retry = 3)
                   
-                  print("実行１")
-                  domain_input_field = WebDriverWait(driver, 50).until(
-                        EC.visibility_of_element_located((By.CSS_SELECTOR, ".w43per"))
-                  )
-
-                  domain_input_field.send_keys(domain)
+                  server_info = get_server()
                   
-                  
-                  print("実行2")
-                  search_btn = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, ".btnSubmitBlack")))
-                  driver.execute_script("arguments[0].click();", search_btn) 
-
-      
-                  open_btn = WebDriverWait(driver, 20).until(
-                        EC.visibility_of_element_located((By.XPATH, f"//a[@href='moddns.php?action=moddns2&domainname={domain}']"))
-                  )
-                  
-                  driver.execute_script("arguments[0].click();", open_btn)
-                  if(success_domain[0] == domain):
-                        path = "./dns_info.txt"
-                        with open(path) as f:
-                              dns_data = f.read()
-                              print(dns_data)
-                  
-                  # DNS情報を入力する
-                  print("実行3")
-                  textarea = WebDriverWait(driver, 20).until(
-                        EC.visibility_of_element_located((By.CSS_SELECTOR, "#records"))
-                  )
-                  
-                  textarea_value = textarea.get_attribute("value")
-                  
-                  if(textarea_value == ""):
-                        print("実行4")
-                        textarea.send_keys(dns_data)  
-                      
-                  time.sleep(3)
-                        
-
-                  print("実行5")
-                  send_btn = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, ".inputSend")))
-                  driver.execute_script("arguments[0].scrollIntoView(true);", send_btn)
-                  driver.execute_script("arguments[0].click();", send_btn)
-
-                  print("実行6")
-                  return_button = WebDriverWait(driver, 60).until(
-                        EC.visibility_of_element_located((By.XPATH, f"//a[@href='modall.php']"))
-                  )
-                  
-                  print(return_button)
-                  time.sleep(3)
-                  print("実行7")
-                  driver.execute_script("arguments[0].click();", return_button)
-                  send_line_notify(f"{domain}のDNS登録に成功しました。")
-                  
-
-            send_line_notify("全てのドメインへのDNS設定に成功しました。次の処理へが30分後に開始されます。")
+            send_line_notify(f"全てのドメインへのDNS設定に成功しました。次の処理が開始されます。\n\n サーバー名: {server_info}")
             print(f"{success_domain}346行目")
     
       except Exception as e:
-            if(retry > 0):
-                  driver.refresh()
-                  set_dns(driver, success_domain, dns_data, retry -1)
-            else:
-                  get_error(e, "DNS登録の最中にエラーが発生しました。")
+            get_error(e, "DNS登録の最中にエラーが発生しました。")
 
 
 def set_dns_process(success_domain, driver, login_url):
 # # # DNS設定
-      dns_data = ""
+      path = "./dns_info.txt"
+      with open(path) as f:
+            dns_data = f.read().strip()
+            
       login_to_site_for_dns(driver, login_url)
       set_dns(driver, success_domain, dns_data)
       
@@ -387,29 +421,12 @@ def main(domain_data):
             purchase_domain(driver, domain_data)
             # 成功したドメイン
             success_domain = process_purchase(driver, login_url, username, password, domain_data)
+            
+            # domain = ['bison-dolphin.info', 'panda-crocodile.click', 'arrow-banana.site', 'xylophone-van.site', 'yeti-yacht.click']
             print(f"{success_domain} 377行目")
             set_dns_process(success_domain, driver, login_url)
             
             return success_domain
       except Exception as e:
             get_error(e, "エラー発生")
-            
-
-  
-
-
-
-
-
-
-            
-            
-
-
-            
-
-      
-
-
-
             

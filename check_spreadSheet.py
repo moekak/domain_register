@@ -4,6 +4,7 @@ from google.oauth2.service_account import Credentials
 
 from error import get_error
 from line_notify import send_line_notify
+import time
 
 
 def access_to_spreadSheet(spreadsheet_id, server_name):
@@ -21,7 +22,9 @@ def access_to_spreadSheet(spreadsheet_id, server_name):
             # spreadcheet
             spreadsheet = client.open_by_key(spreadsheet_id)
             
-            check_D_row(spreadsheet, "D", 5, 15, "AWS@4号機")
+            return spreadsheet
+            
+            check_D_row(spreadsheet, "D", 5, 15, server_name)
             check_spreadSheet(spreadsheet, server_name)
 
       
@@ -59,8 +62,10 @@ def check_D_row(sheet, column, start_row, end_row, server_name):
             for cell in cells:
                   if cell.value != "":
                         value_list.append(cell.value)
+            
+            print(value_list)
 
-            if len(value_list) <= 2:
+            if len(value_list) <= 4 and len(value_list) != 0:
                   for i, cell in enumerate(cells):
                         target_cells[i].value = cell.value
                         cell.value = ''  # 現在の列のデータをクリア
@@ -88,6 +93,7 @@ def check_row(sheet):
                   if any(cell.value for cell in cells):
                         # データがあれば、その列のデータを全て取得
                         filled_columns.append(col_index_to_letter(col_index))
+                        
 
             return filled_columns
       except Exception as e:
@@ -106,9 +112,13 @@ def is_empty(sheet):
             get_error(e, "エラーが起きました")
             
       
-def check_spreadSheet(sheet, server_name):
+def check_spreadSheet(spreadsheet_id,server_name):
       try: 
+            sheet = access_to_spreadSheet(spreadsheet_id, server_name)
             workSheet = sheet.worksheet(server_name)
+            
+            check_D_row(sheet, "D", 5, 15, server_name)
+            
             
             if is_empty(workSheet):
                   columns = check_row(workSheet)
@@ -117,9 +127,9 @@ def check_spreadSheet(sheet, server_name):
                         target_col_index = current_col_index - 1
 
                         # 現在の列の全データを取得
-                        current_cells = workSheet.range(1, current_col_index, workSheet.row_count, current_col_index)
+                        current_cells = workSheet.range(5, current_col_index, 15, current_col_index)
                         # 移動先の列の全データを取得
-                        target_cells = workSheet.range(1, target_col_index, workSheet.row_count, target_col_index)
+                        target_cells = workSheet.range(5, target_col_index, 15, target_col_index)
 
                         # 現在の列のデータを移動先の列にコピー
                         for i, cell in enumerate(current_cells):
@@ -130,18 +140,25 @@ def check_spreadSheet(sheet, server_name):
                         workSheet.update_cells(target_cells)
                         workSheet.update_cells(current_cells)
       except Exception as e: 
-            get_error(e, "スプレッドシートのドメインチェックに失敗しました。")
+            get_error(e, f"スプレッドシートのドメインチェックに失敗しました。\n\n シート名: {server_name}")
+
 
 def check_start():    
-      access_to_spreadSheet("1tycxRzP4PT07_8Qy56zw1UxEgssNUXq439gzDoaEx00","AWS@4号機" )
-      access_to_spreadSheet("1tycxRzP4PT07_8Qy56zw1UxEgssNUXq439gzDoaEx00","AWS@5号機" )
-      access_to_spreadSheet("1tycxRzP4PT07_8Qy56zw1UxEgssNUXq439gzDoaEx00","AWS@6号機" )
-      access_to_spreadSheet("1tycxRzP4PT07_8Qy56zw1UxEgssNUXq439gzDoaEx00","AWS@7号機" )
-      access_to_spreadSheet("1tycxRzP4PT07_8Qy56zw1UxEgssNUXq439gzDoaEx00","AWS@8号機" )
-      access_to_spreadSheet("1tycxRzP4PT07_8Qy56zw1UxEgssNUXq439gzDoaEx00","Linode3（他社）" )
-      access_to_spreadSheet("1tycxRzP4PT07_8Qy56zw1UxEgssNUXq439gzDoaEx00","Linode4（他社）" )
-      access_to_spreadSheet("1tycxRzP4PT07_8Qy56zw1UxEgssNUXq439gzDoaEx00","Linode5（他社）" )
-      access_to_spreadSheet("1tycxRzP4PT07_8Qy56zw1UxEgssNUXq439gzDoaEx00","Linode6（他社）" )
+      check_spreadSheet("1tycxRzP4PT07_8Qy56zw1UxEgssNUXq439gzDoaEx00","AWS@4号機" )
+      check_spreadSheet("1tycxRzP4PT07_8Qy56zw1UxEgssNUXq439gzDoaEx00","AWS@5号機" )
+      check_spreadSheet("1tycxRzP4PT07_8Qy56zw1UxEgssNUXq439gzDoaEx00","AWS@6号機" )
+      check_spreadSheet("1tycxRzP4PT07_8Qy56zw1UxEgssNUXq439gzDoaEx00","AWS@7号機" )
+      check_spreadSheet("1tycxRzP4PT07_8Qy56zw1UxEgssNUXq439gzDoaEx00","AWS@8号機" )
+      check_spreadSheet("1tycxRzP4PT07_8Qy56zw1UxEgssNUXq439gzDoaEx00","Linode3（他社）")
+      check_spreadSheet("1tycxRzP4PT07_8Qy56zw1UxEgssNUXq439gzDoaEx00","Linode4（他社）")
+      check_spreadSheet("1tycxRzP4PT07_8Qy56zw1UxEgssNUXq439gzDoaEx00","Linode5（他社）")
+      time.sleep(90)
+      check_spreadSheet("1tycxRzP4PT07_8Qy56zw1UxEgssNUXq439gzDoaEx00","Linode5-2（他社）")
+      check_spreadSheet("1tycxRzP4PT07_8Qy56zw1UxEgssNUXq439gzDoaEx00","Linode5-3（他社）")
+      check_spreadSheet("1tycxRzP4PT07_8Qy56zw1UxEgssNUXq439gzDoaEx00","Linode5-4（他社）")
+      check_spreadSheet("1tycxRzP4PT07_8Qy56zw1UxEgssNUXq439gzDoaEx00","Linode6（他社）")
+      check_spreadSheet("1tycxRzP4PT07_8Qy56zw1UxEgssNUXq439gzDoaEx00","Linode6-2（他社）")
+      check_spreadSheet("1tycxRzP4PT07_8Qy56zw1UxEgssNUXq439gzDoaEx00","Linode6-4（他社）")
 
 check_start()
 

@@ -28,8 +28,23 @@ def get_server():
             if(dns_data == "a @ 139.177.191.181"):
                 return "Linode5（他社）"
             
+            if(dns_data == "a @ 139.162.54.8"):
+                return "Linode5-2（他社）"
+            
+            if(dns_data == "a @ 172.104.172.127"):
+                return "Linode5-3（他社）"
+            
+            if(dns_data == "a @ 139.162.45.31"):
+                return "Linode5-4（他社）"
+            
             if(dns_data == "a @ 172.104.56.67"):
                 return "Linode6（他社）"
+            
+            if(dns_data == "a @ 172.104.172.147"):
+                return "Linode6-2（他社）"
+            
+            if(dns_data == "a @ 172.104.57.116"):
+                return "Linode6-4（他社）"
             
       
             

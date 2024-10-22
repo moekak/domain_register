@@ -19,10 +19,7 @@ class SpreadSheet:
             client = gspread.authorize(credentials)
             # spreadsheet_id = "1drNKOhzedS3Q-owDhzP8z6ZmOQtKQji4gJlCQcELriM"
             spreadsheet = client.open_by_key(spreadsheet_id)
-            
-            sheet_title = spreadsheet.title
-            print(f"Opened sheet title: {sheet_title}")
-            
+
             self.insert_data_operation(spreadsheet, success_domain)
             
             
@@ -56,9 +53,10 @@ class SpreadSheet:
                 
                 
                 # 13行目まで空欄がなければ次の列へ
-                if col_index >= workSheet.col_count:
+                if col_index >= 8:
                     return "No empty cells found and no more columns available."
                 col_index += 1
+                
             
             send_line_notify("取得したドメインのスプレッドシートへの書き込みに成功しました。")
         except Exception as e:
