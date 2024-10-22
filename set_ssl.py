@@ -83,11 +83,7 @@ def check_server():
 
     print("ERROR:dnsがマッチしません")
     return None
-
-
     
-
-        
 def login_to_aapanel(driver, login_url, username, password, retry=3):
     try:
         driver.get(login_url)

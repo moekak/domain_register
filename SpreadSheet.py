@@ -3,18 +3,17 @@ from google.oauth2.service_account import Credentials
 from get_server_name import get_server
 from error import get_error
 from line_notify import send_line_notify
+import os
 
 class SpreadSheet:
     def access_to_spreadSheet(self, spreadsheet_id, success_domain):
         try:
             send_line_notify("取得したドメインのスプレッドシートへの書き込みを開始します。")
             # Google APIに接続するためのスコープと認証情報
-            scopes = [
-                'https://www.googleapis.com/auth/spreadsheets',
-                'https://www.googleapis.com/auth/drive'
-            ]
+            google_credentials_file = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+            google_scopes = os.getenv("GOOGLE_SCOPES").split(",")
 
-            credentials = Credentials.from_service_account_file("./file/inspiring-tower-424202-g9-b6ee895eb2c2.json", scopes=scopes)
+            credentials = Credentials.from_service_account_file(google_credentials_file, scopes=google_scopes)
             # gspreadクライアントを認証
             client = gspread.authorize(credentials)
             # spreadsheet_id = "1drNKOhzedS3Q-owDhzP8z6ZmOQtKQji4gJlCQcELriM"
